@@ -3,37 +3,29 @@
  */
 public class HuffmanNode implements Comparable<HuffmanNode> {
 
-    private Integer frequancy;
+    private Integer frequency;
     private Character value;
     private HuffmanNode left;
-    protected HuffmanNode right;
+    private HuffmanNode right;
     private String code;
 
 
     public HuffmanNode(Integer frequency, Character value) {
-        this.frequancy = frequency;
+        this.frequency = frequency;
         this.value = value;
     }
 
     @Override
     public int compareTo(HuffmanNode o) {
-        return this.frequancy.compareTo(o.frequancy);
+        return this.frequency.compareTo(o.frequency);
     }
 
-    public Integer getFrequancy() {
-        return frequancy;
-    }
-
-    public void setFrequancy(Integer frequancy) {
-        this.frequancy = frequancy;
+    public Integer getFrequency() {
+        return frequency;
     }
 
     public Character getValue() {
         return value;
-    }
-
-    public void setValue(Character value) {
-        this.value = value;
     }
 
     public HuffmanNode getLeft() {

@@ -17,7 +17,7 @@ public class Huffman {
         PriorityQueue<HuffmanNode> huffmanNodes = createPriorityQueue(frequencyMap(code));
         createTree(huffmanNodes);
         setCode(tree,"");
-        codeMap = new HashMap<Character, String>();
+        codeMap = new HashMap<>();
         growCodeMap(tree);
 
     }
@@ -32,11 +32,11 @@ public class Huffman {
     public String encode(String text){
         String r ="";
         for(int i = 0; i<text.length(); i++){
-            if(!codeMap.containsKey((Character)text.charAt(i))){
+            if(!codeMap.containsKey(text.charAt(i))){
                 return "Error";
             }
             else{
-                r += codeMap.get((Character)text.charAt(i));
+                r += codeMap.get(text.charAt(i));
             }
         }
         return r;
@@ -52,7 +52,7 @@ public class Huffman {
 
             HuffmanNode node1 = huffmanNodes.poll();
             HuffmanNode node2 = huffmanNodes.poll();
-            HuffmanNode huffmanNode = new HuffmanNode(node1.getFrequancy()+node2.getFrequancy(),null);
+            HuffmanNode huffmanNode = new HuffmanNode(node1.getFrequency()+node2.getFrequency(),null);
             huffmanNode.setLeft(node1);
             huffmanNode.setRight(node2);
             huffmanNodes.add(huffmanNode);
