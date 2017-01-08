@@ -10,7 +10,6 @@ public class HuffmanTree {
     public HuffmanTree() {
     }
 
-
     public HuffmanNode getTree() {
         return tree;
     }

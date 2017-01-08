@@ -23,40 +23,19 @@ public class HuffmanCode {
 
     }
 
-
-    public String encode() {
-        String encodedText = "";
-        for (int i = 0; i < code.length(); i++) {
-            encodedText += codeMap.get(code.charAt(i));
-        }
-        return encodedText;
+    public String getCode() {
+        return code;
     }
 
-    public String decode(String text) {
-
-        HuffmanNode root = huffmanTree.getTree();
-        String decodedText = "";
-        for (int i = 0; i < text.length(); i++) {
-            Character character = text.charAt(i);
-            if (character.equals('1')) {
-                root = root.getRight();
-            } else if (character.equals('0')) {
-                root = root.getLeft();
-            }
-
-            if (root.getValue() != null) {
-                decodedText += root.getValue();
-                root = huffmanTree.getTree();
-            }
-        }
-        return decodedText;
+    public HuffmanTree getHuffmanTree() {
+        return huffmanTree;
     }
 
     public HashMap<Character, String> getCodeMap() {
         return this.codeMap;
     }
 
-    public HashMap<Character, Integer> frequencyMap(String text) {
+    private HashMap<Character, Integer> frequencyMap(String text) {
 
         HashMap<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < text.length(); i++) {
@@ -70,14 +49,14 @@ public class HuffmanCode {
         return map;
     }
 
-    public PriorityQueue<HuffmanNode> createPriorityQueue(HashMap<Character, Integer> frequencyMap) {
+    private PriorityQueue<HuffmanNode> createPriorityQueue(HashMap<Character, Integer> frequencyMap) {
         for (Character character : frequencyMap.keySet()) {
             huffmanNodes.add(new HuffmanNode(frequencyMap.get(character), character));
         }
         return huffmanNodes;
     }
 
-    public void generateCode(HuffmanNode root, String code) {
+    private void generateCode(HuffmanNode root, String code) {
         if (root != null) {
             root.setCode(code);
             if (root.getValue() != null) {
@@ -87,4 +66,6 @@ public class HuffmanCode {
             generateCode(root.getRight(), code + "1");
         }
     }
+
+
 }

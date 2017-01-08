@@ -1,12 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -15,24 +7,8 @@ import java.util.Scanner;
 public class Main {
 
 
-    private static String readFileAsString(String filePath) throws IOException {
-        StringBuffer fileData = new StringBuffer();
-        BufferedReader reader = new BufferedReader(
-                new FileReader(filePath));
-        char[] buf = new char[1024];
-        int numRead = 0;
-        while ((numRead = reader.read(buf)) != -1) {
-            String readData = String.valueOf(buf, 0, numRead);
-            fileData.append(readData);
-        }
-        reader.close();
-        return fileData.toString();
-    }
-
     public static void main(String[] args) {
 
-
-        System.out.println("Witaj!");
         System.out.println("Podaj źródło tekstu:");
         System.out.println("1. Plik");
         System.out.println("2. Konsola");
@@ -43,48 +19,72 @@ public class Main {
 
             case 1: {
                 System.out.println("Podaj lokalizacje pliku:");
-                Scanner in3 = new Scanner(System.in);
-                String lc = in3.nextLine();
+                Scanner in2 = new Scanner(System.in);
+                String sourceOfFile = in2.nextLine();
                 try {
-                    HuffmanCode huffmanCode = new HuffmanCode(readFileAsString(lc));
-                    System.out.println("Twoj zakodowany tekst:");
-                    System.out.println(huffmanCode.getCodeMap());
-                    System.out.println(huffmanCode.encode());
-                    System.out.println("Tekst po dekodowaniu:");
-                    List<String> lines2 = Arrays.asList(huffmanCode.encode());
-                    Path file2 = Paths.get("encoded2.txt");
-                    Files.write(file2, lines2, Charset.forName("UTF-8"));
-                    System.out.println(huffmanCode.decode(readFileAsString(file2.toString())));
-                    System.out.println("Wyniki zostana zapisane do pliku");
-                    List<String> lines = Arrays.asList(huffmanCode.getCodeMap().toString(), huffmanCode.encode());
-                    Path file = Paths.get("encoded.txt");
-                    Files.write(file, lines, Charset.forName("UTF-8"));
+                    Huffman huffman = new Huffman(FileHandler.readFile(sourceOfFile));
+                    System.out.println("Pracuje...");
+
+                    long startTimeToEncode = System.currentTimeMillis();
+                    String compressed = huffman.encode();
+                    FileHandler.saveFile(compressed, "EncodedText.txt");
+                    long stopTimeOfEncode = System.currentTimeMillis();
+
+                    long elapsedTimeOfEncode = stopTimeOfEncode - startTimeToEncode;
+
+                    System.out.println("Twój tekst został pomyślnie zakodowany i zapisany do pliku.");
+                    System.out.println("Czas wykonywania wyniosl: " + elapsedTimeOfEncode + " ms");
+
+                    System.out.println("Czy chcesz odkodować plik?");
+                    System.out.println("1. Tak");
+                    System.out.println("2. Nie");
+
+                    Scanner in4 = new Scanner(System.in);
+                    int choice = in4.nextInt();
+
+                    switch (choice) {
+
+                        case 1: {
+                            System.out.println("Dekoduje...");
+
+                            long startTimeToDecode = System.currentTimeMillis();
+                            String decompressed = huffman.decode(compressed);
+                            FileHandler.saveFile(decompressed, "DecodedText.txt");
+                            long stopTimeOfDecode = System.currentTimeMillis();
+
+                            long elapsedTimeOfDecode = stopTimeOfDecode - startTimeToDecode;
+
+                            System.out.println("Plik zostal pomyślnie odkodowany. Resultat został zapisany do pliku.");
+                            System.out.println("Czas wykonywania wyniósł: " + elapsedTimeOfDecode + " ms");
+                            break;
+                        }
+
+                        case 2: {
+                            break;
+                        }
+                    }
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Zostałą podana nieprawidłowa ścieżka do pliku.");
                 }
                 break;
             }
             case 2: {
 
-                Scanner in2 = new Scanner(System.in);
-                String text = in2.nextLine();
-                HuffmanCode huffmanCode = new HuffmanCode(text);
-                System.out.println("Twoj zakodowany tekst:");
-                System.out.println(huffmanCode.getCodeMap());
-                System.out.println(huffmanCode.encode());
-                System.out.println("Tekst po dekodowaniu:");
-                System.out.println(huffmanCode.decode(huffmanCode.encode()));
+                System.out.println("Podaj tekst:");
+                Scanner in3 = new Scanner(System.in);
+                String text = in3.nextLine();
+                Huffman huffman = new Huffman(text);
+                String compressed = huffman.encode();
 
+                System.out.println("Twoj zakodowany tekst:");
+                System.out.println(compressed);
+                System.out.println("Tekst po dekodowaniu:");
+                System.out.println(huffman.decode(compressed));
                 break;
             }
 
         }
-
-
-        // HuffmanCode huffmanCode = new HuffmanCode("Ala ma kota matematyka");
-        // System.out.println(huffmanCode.getCodeMap());
-        //  System.out.println(huffmanCode.encode("Ala ma kota matematyka"));
-        // System.out.println(huffmanCode.decode((huffmanCode.encode("Ala ma kota matematyka"))));
     }
 
 
